@@ -38,6 +38,9 @@ module Princely
 
       html_string = localize_html_string(html_string, Rails.public_path) if options[:relative_paths]
 
+      # Allow rendering the underlying HTML if the debug option is present
+      return html_string if options[:debug]
+
       # Send the generated PDF file from our html string.
       if filename = options[:filename] || options[:file]
         prince.pdf_from_string_to_file(html_string, filename)
@@ -57,7 +60,7 @@ module Princely
       send_data(
         make_pdf(options),
         :filename => "#{pdf_name}.pdf",
-        :type => 'application/pdf',
+        :type => options[:debug] ? 'text/html' : 'application/pdf',
         :disposition => options[:disposition]
       )
     end
