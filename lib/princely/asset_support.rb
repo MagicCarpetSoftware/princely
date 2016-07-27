@@ -19,5 +19,16 @@ module Princely
       Rails.application.assets ||= Sprockets::Environment.new
       Rails.application.assets.find_asset(asset.gsub(%r{/assets/}, "")).try(:pathname) || asset
     end
+
+    def asset_content(source)
+      Rails.application.assets.find_asset(source).to_s
+    end
+
+    def pdf_stylesheet_link_tag(*sources)
+      sources.collect do |source|
+        source = asset_file_path(source)
+        "<style type='text/css'>#{asset_content(source)}</style>"
+      end.join("\n").html_safe
+    end
   end
 end
