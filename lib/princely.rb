@@ -26,6 +26,16 @@ module Princely
   autoload :Executable,   'princely/executable'
 
   class << self
+    @@defaults = {}
+
+    def defaults=(args = {})
+      @@defaults = args
+    end
+
+    def defaults
+      @@defaults || {}
+    end
+
     def executable
       @custom_executable || Princely::Executable.new
     end
